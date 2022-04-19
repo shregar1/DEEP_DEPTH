@@ -6,11 +6,12 @@ from models.modules.unet import BottleNeck, UnetBlock
 
 
 class DenseUnet(nn.Module):
-  def __init__(self,encoder_arch,input_channels):
+  def __init__(self,encoder_arch,input_channels, encoder_path=None):
     super(DenseUnet,self).__init__()
     self.densenet_encoder = DenseNets(input_channels=input_channels,
                                       encoder_arch=encoder_arch)
-    self.densenet_encoder.load_state_dict(torch.load("/content/drive/MyDrive/DensetNet_169_encoder_model.pth"))
+    if encoder_path is not None:
+        self.densenet_encoder.load_state_dict(torch.load(encoder_path))
     self.bottleneck = BottleNeck(in_channels=self.densenet_encoder.in_channels)
     self.conv1 = nn.Conv2d(in_channels=self.densenet_encoder.in_channels+512,
                           out_channels=self.densenet_encoder.in_channels+512,kernel_size=3,
@@ -58,4 +59,4 @@ class DenseUnet(nn.Module):
     x_ = torch.cat([input_image,x_],dim=1)
     out = self.out_conv(x_)
     return out
-    
+  

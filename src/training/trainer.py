@@ -40,11 +40,11 @@ class Trainer:
         
         
     def fit(self):
-        for epoch in tqdm.tqdm(range(self.epochs)):
+        for epoch in range(self.epochs):
             #Training Phase
             self.model.train()
             train_loss = []
-            for i, (images, masks) in enumerate(self.train_dataloader):
+            for i, (images, masks) in tqdm.tqdm(enumerate(self.train_dataloader)):
                 images=images/255
                 images.to(self.device)
                 masks.to(self.device)
@@ -58,7 +58,7 @@ class Trainer:
             #Validation Phase
             self.model.eval()
             valid_loss = []
-            for i, (images, masks) in enumerate(self.valid_dataloader):
+            for i, (images, masks) in tqdm.tqdm(enumerate(self.valid_dataloader)):
                 images=images/255
                 images.to(self.device)
                 masks.to(self.device)
@@ -80,4 +80,3 @@ class Trainer:
                            os.path.join(self.out_weight_dir,f"Dense_Depth_model_loss_{avg_valid_loss}.pth"))
                 self.best_loss = avg_valid_loss
         return
-    

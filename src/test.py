@@ -29,11 +29,12 @@ model = DenseUnet(encoder_arch=encoder_arch,
 
 if model_weights_file is not None:
     model_path = os.path.join(weight_dir, model_weights_file)
-    model.load_state_dict(torch.load(model_path))
+    model.load_state_dict(torch.load(model_path, map_location=device))
 else:
     pass
 
 model = model.to(device)
-train=Tester(device=device, CUDA=CUDA, root_dir=root_dir,
-             output_dir=output_dir, image_size=image_size, 
-             model=model)
+test=Tester(device=device, CUDA=CUDA, root_dir=root_dir,
+            output_dir=output_dir, image_size=image_size, 
+            model=model)
+test.fit()

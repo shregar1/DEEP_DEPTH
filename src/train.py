@@ -44,7 +44,7 @@ model = DenseUnet(encoder_arch=encoder_arch,
 
 if model_weights_file is not None:
     model_path = os.path.join(weight_dir, model_weights_file)
-    model.load_state_dict(torch.load(model_path))
+    model.load_state_dict(torch.load(model_path, map_location=device))
 else:
     pass
 
@@ -58,3 +58,4 @@ train=Trainer(device=device, CUDA=CUDA, dataset_path=dataset_path,
               output_dir=output_dir, image_size=image_size, 
               batch_size=batch_size, model=model, epochs=epochs,
               lr=lr, best_loss=best_loss)
+train.fit()
